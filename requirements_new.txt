@@ -1,0 +1,4 @@
+# Dependencias necesarias para instalar
+
+djangorestframework>=3.14.0
+django-cors-headers>=4.2.0
