@@ -113,7 +113,7 @@ FoodPlease/
 
 | Capa | Tecnología |
 |------|------------|
-| Backend | Django 3.1+ |
+| Backend | Flask |
 | BD | SQLite3 |
 | Frontend | HTML5 + Bootstrap 4 |
 | Estilos | CSS3 Personalizado |
@@ -146,7 +146,7 @@ Este CRUD implementa los siguientes componentes de la propuesta FoodPlease:
 - [ ] Autenticación personalizada
 
 **Fase 2 (Sprint 2-3):**
-- [ ] API REST con Django REST Framework
+- [ ] API REST con Flask REST Framework
 - [ ] Agregar modelo `Cliente` y `Repartidor`
 - [ ] Integración Google Maps
 
