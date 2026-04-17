@@ -23,44 +23,32 @@ El sistema implementa las operaciones básicas necesarias para gestionar restaur
 ### 📁 Estructura del Proyecto
 
 ```
-django-crud-sqlite3/
-├── manage.py                          # Comando principal de Django
-├── README.md                          # Este archivo
-├── foodplease.db                      # Base de datos SQLite3 (generada al iniciar)
+FoodPlease/
+├── app/                               # Backend Flask
+│   ├── __init__.py                    # Factory Flask
+│   ├── config.py                      # Configuración
+│   ├── models/
+│   │   └── __init__.py                # Modelos SQLAlchemy
+│   ├── routes/
+│   │   ├── restaurantes.py            # Endpoints API
+│   │   ├── platos.py                  # Endpoints API
+│   │   └── __init__.py
+│   └── schemas/
+│       └── __init__.py                # Validadores
 │
-├── Aplicaciones/
-
-│   │   ├── models.py
-│   │   ├── views.py
-│   │   ├── urls.py
-│   │   ├── templates/
-│   │   ├── static/
-│   │   └── migrations/
-│   │
-│   └── Restaurantes/                  # ⭐ APP NUEVA - CRUD DE RESTAURANTES
-│       ├── models.py                  # Modelos: Restaurante, Plato
-│       ├── views.py                   # Vistas CRUD completas
-│       ├── urls.py                    # Rutas del sistema
-│       ├── admin.py                   # Registro en admin de Django
-│       ├── templates/
-│       │   ├── base.html              # Template base (herencia)
-│       │   ├── gestionRestaurantes.html
-│       │   ├── edicionRestaurante.html
-│       │   ├── gestionPlatos.html
-│       │   └── edicionPlato.html
-│       ├── static/
-│       │   ├── css/
-│       │   │   └── gestionRestaurantes.css
-│       │   └── js/
-│       │       └── gestionRestaurantes.js
-│       └── migrations/                # Historial de cambios del esquema
+├── frontend/                          # Frontend React + Vite
+│   ├── src/
+│   │   ├── App.tsx                    # Componente principal
+│   │   ├── index.css                  # Estilos
+│   │   ├── components/
+│   │   ├── services/
+│   │   └── types/
+│   ├── package.json
+│   └── vite.config.ts
 │
-└── config/                            # Configuración del proyecto Django
-    ├── __init__.py
-    ├── settings.py                    # Configuración global
-    ├── urls.py                        # URLs principales
-    ├── asgi.py
-    └── wsgi.py
+├── run.py                             # Entry point
+├── init_db.py                         # Inicialización BD
+└── foodplease.db                      # Base de datos SQLite3
 ```
 
 ---
@@ -208,38 +196,36 @@ GET /eliminar_plato/<id_restaurante>/<id_plato>
 
 ### Paso 1: Instalar Dependencias
 ```bash
-pip install django
+pip install -r requirements_new.txt
 ```
 
-### Paso 2: Aplicar Migraciones
+### Paso 2: Inicializar Base de Datos
 ```bash
-python manage.py migrate
+python init_db.py
 ```
 
-Esto crea la estructura de tablas en `foodplease.db`
+Esto crea y popula la base de datos `foodplease.db`
 
-### Paso 3: Crear Migraciones para la App Restaurantes
+### Paso 3: Ejecutar Servidor Flask
 ```bash
-python manage.py makemigrations Aplicaciones.Restaurantes
-python manage.py migrate Aplicaciones.Restaurantes
+python run.py
 ```
 
-### Paso 4: Crear Superusuario (Admin)
+El servidor estará disponible en: **http://127.0.0.1:5000**
+
+### Paso 4: Ejecutar Frontend React
+En otra terminal:
 ```bash
-python manage.py createsuperuser
-```
-Ingresa credenciales para acceder a `/admin/`
-
-### Paso 5: Iniciar el Servidor
-```bash
-python manage.py runserver
+cd frontend
+npm install
+npm run dev
 ```
 
-El servidor estará disponible en: **http://127.0.0.1:8000**
+El frontend estará disponible en: **http://localhost:5173**
 
 ### Acceso a Interfaces
-- **Panel de Restaurantes:** `http://127.0.0.1:8000/`
-- **Admin de Django:** `http://127.0.0.1:8000/admin/`
+- **API Flask:** `http://127.0.0.1:5000/`
+- **Frontend React:** `http://localhost:5173`
 
 ---
 
@@ -387,7 +373,7 @@ Django Admin (`/admin/`) permite:
 | Componente FoodPlease | Implementado en CRUD | Observaciones |
 |---|---|---|
 | **Panel Web - Restaurante** | ✅ Sí | Permite gestionar menú y disponibilidad |
-| **Panel Web - Admin** | ⚠️ Parcial | Admin Django cubre esto; versión web podría mejorar |
+| **Panel Web - Admin** | ✅ Sí | React frontend cubre administración de restaurantes |
 | **Gestión de Pedidos** | ❌ No | Requiere modelo Pedido adicional |
 | **Gestión de Repartidores** | ❌ No | Requiere modelo Repartidor y GPS |
 | **Notificaciones en Tiempo Real** | ❌ No | Requiere WebSockets/Firebase |
@@ -476,18 +462,20 @@ Ingredientes: Choclo, pollo, cebolla, aceituna, máscarpone
 
 | Capa | Tecnología | Versión |
 |---|---|---|
-| **Backend** | Django | 3.1+ |
+| **Backend** | Flask | 2.3+ |
+| **ORM** | SQLAlchemy | 2.0+ |
 | **Base de Datos** | SQLite3 | Built-in |
-| **Frontend** | HTML5 + Bootstrap | 4.5.3 |
-| **Estilos** | CSS3 Personalizado | |
-| **Interactividad** | JavaScript Vanilla | ES6 |
-| **Server** | Django Development | Built-in |
+| **Frontend** | React.js | 18+ |
+| **Build Tool** | Vite | 4+ |
+| **Estilos** | Tailwind CSS | 3+ |
+| **TypeScript** | TypeScript | 5+ |
+| **Server** | Flask Development | Built-in |
 
 **Alternativas para Producción:**
 - Servidor: Gunicorn + Nginx
 - BD: PostgreSQL (recomendado)
-- Frontend: React.js (escalabilidad)
 - Hosting: AWS, Google Cloud, DigitalOcean
+- Containerización: Docker
 
 ---
 

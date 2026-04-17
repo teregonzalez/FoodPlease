@@ -9,6 +9,7 @@ import { PlatoList, PlatoForm } from './components/dishes';
 /**
  * Aplicación Principal
  * SOLID: SRP - Orquestación de componentes
+ * Diseño: 2 colores - Gris oscuro (#1F2937) y Blanco (#FFFFFF)
  */
 
 type View = 'restaurants' | 'dishes' | 'create-restaurant' | 'edit-restaurant' | 'create-dish' | 'edit-dish';
@@ -45,41 +46,39 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen" style={{ backgroundColor: '#f9fafb' }}>
       {/* Header */}
-      <header className="bg-red-700 text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold">🍕 FoodPlease Admin</h1>
-          <p className="text-red-100">Gestión de Restaurantes y Menú</p>
+      <header style={{ backgroundColor: '#1F2937' }} className="text-white shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <h1 className="text-4xl font-bold">FoodPlease Admin</h1>
+          <p className="mt-2 text-gray-300">Gestión de Restaurantes y Menú</p>
         </div>
       </header>
 
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200 shadow">
+      <nav style={{ backgroundColor: '#1F2937' }} className="text-white shadow">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex gap-4 flex-wrap">
             <button
               onClick={() => setView('restaurants')}
-              className={`px-4 py-2 rounded font-semibold transition ${
-                view === 'restaurants' || view === 'edit-restaurant'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300'
-              }`}
+              className="px-4 py-2 rounded font-semibold transition"
+              style={{
+                backgroundColor: view === 'restaurants' || view === 'edit-restaurant' ? '#ffffff' : 'rgba(255,255,255,0.2)',
+                color: view === 'restaurants' || view === 'edit-restaurant' ? '#1F2937' : '#ffffff',
+              }}
             >
-              📋 Restaurantes
+              Restaurantes
             </button>
             <button
               onClick={() => setView('dishes')}
-              className={`px-4 py-2 rounded font-semibold transition ${
-                view === 'dishes' ||
-                view === 'create-dish' ||
-                view === 'edit-dish'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300'
-              }`}
+              className="px-4 py-2 rounded font-semibold transition"
+              style={{
+                backgroundColor: view === 'dishes' || view === 'create-dish' || view === 'edit-dish' ? '#ffffff' : 'rgba(255,255,255,0.2)',
+                color: view === 'dishes' || view === 'create-dish' || view === 'edit-dish' ? '#1F2937' : '#ffffff',
+              }}
               disabled={!selectedRestaurante}
             >
-              🍴 Platos
+              Platos
               {selectedRestaurante && (
                 <span className="ml-2 text-sm">
                   ({selectedRestaurante.nombre})
@@ -96,15 +95,17 @@ const App: React.FC = () => {
         {view === 'restaurants' && (
           <div>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">Restaurantes</h2>
+              <h2 className="text-3xl font-bold" style={{ color: '#1F2937' }}>Restaurantes</h2>
               <button
                 onClick={handleCreateRestaurante}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                className="text-white px-6 py-2 rounded font-semibold hover:shadow-lg transition"
+                style={{ backgroundColor: '#1F2937' }}
               >
-                ➕ Nuevo Restaurante
+                + Nuevo Restaurante
               </button>
             </div>
             <RestauranteList
+              key={view}
               onEdit={handleSelectRestaurante}
               onDelete={() => {}}
             />
@@ -131,12 +132,13 @@ const App: React.FC = () => {
             </div>
             <div className="lg:col-span-2">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold">Platos del Restaurante</h3>
+                <h3 className="text-2xl font-bold" style={{ color: '#1F2937' }}>Platos del Restaurante</h3>
                 <button
                   onClick={handleCreateDish}
-                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                  className="text-white px-6 py-2 rounded font-semibold hover:shadow-lg transition"
+                  style={{ backgroundColor: '#1F2937' }}
                 >
-                  ➕ Nuevo Plato
+                  + Nuevo Plato
                 </button>
               </div>
               <PlatoList
@@ -151,14 +153,15 @@ const App: React.FC = () => {
         {view === 'dishes' && selectedRestaurante && (
           <div>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-3xl font-bold" style={{ color: '#1F2937' }}>
                 Platos de {selectedRestaurante.nombre}
               </h2>
               <button
                 onClick={handleCreateDish}
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                className="text-white px-6 py-2 rounded font-semibold hover:shadow-lg transition"
+                style={{ backgroundColor: '#1F2937' }}
               >
-                ➕ Nuevo Plato
+                + Nuevo Plato
               </button>
             </div>
             <PlatoList
@@ -192,9 +195,9 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white text-center py-4 mt-12" style={{position: "absolute", bottom: 0, width: "100%"}}>
+      <footer className="text-white text-center py-6 mt-12" style={{ backgroundColor: '#1F2937', marginTop: '100px' }}>
         <p>
-          FoodPlease © 2024 - Frontend React con Patrones SOLID
+          FoodPlease © 2026 - Gestión de Restaurantes
         </p>
       </footer>
     </div>

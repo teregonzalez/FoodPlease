@@ -1,4 +1,12 @@
-# Dependencias necesarias para instalar
+# Dependencias necesarias para FoodPlease con Flask
 
-djangorestframework>=3.14.0
-django-cors-headers>=4.2.0
+# Framework web
+Flask>=2.3.0
+Flask-SQLAlchemy>=3.0.0
+Flask-CORS>=4.0.0
+
+# Base de datos y migraciones
+SQLAlchemy>=2.0.0
+
+# Desarrollo
+python-dotenv>=1.0.0

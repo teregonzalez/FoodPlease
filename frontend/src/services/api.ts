@@ -17,7 +17,7 @@ class ApiClient {
   private baseURL: string;
   private headers: HeadersInit;
 
-  constructor(baseURL: string = 'http://localhost:8000/api/v1') {
+  constructor(baseURL: string = 'http://127.0.0.1:5000/api') {
     this.baseURL = baseURL;
     this.headers = {
       'Content-Type': 'application/json',

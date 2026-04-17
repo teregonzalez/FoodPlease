@@ -1,53 +1,50 @@
 # 🚀 INICIO RÁPIDO - FoodPlease CRUD
 
-**Tiempo estimado: 5 minutos**
+**Tiempo estimado: 2 minutos**
 
-## 1️⃣ Instalar Django
-
-```bash
-pip install django
-```
-
-## 2️⃣ Crear Migraciones
+## 1️⃣ Instalar dependencias
 
 ```bash
-python manage.py makemigrations Aplicaciones.Restaurantes
-python manage.py migrate
+pip install -r requirements_new.txt
 ```
 
-## 3️⃣ Crear Admin
+## 2️⃣ Inicializar Base de Datos
 
 ```bash
-python manage.py createsuperuser
+python init_db.py
 ```
-Ingresa credenciales (ej: usuario: `admin`, contraseña: `admin123`)
 
-## 4️⃣ Ejecutar Servidor
+## 3️⃣ Ejecutar Servidor
 
 ```bash
-python manage.py runserver
+python run.py
 ```
 
-## 5️⃣ Abrir en Navegador
+## 4️⃣ Abrir en Navegador
 
-- **Panel de Restaurantes:** http://127.0.0.1:8000
-- **Admin Django:** http://127.0.0.1:8000/admin (usa credenciales del paso 3)
+- **API:** http://127.0.0.1:5000
+- **Frontend:** http://localhost:5173 (en otra terminal: `cd frontend && npm run dev`)
 
 ---
 
 ## 📝 Prueba Rápida
 
-1. Ve a http://127.0.0.1:8000
-2. Llena el formulario para crear un restaurante:
-   - ID: `REST001`
-   - Nombre: `Mi Restaurante`
-   - Dirección: `Calle Principal 123`
-   - Teléfono: `+56912345678`
-   - Email: `contacto@mirestaurante.cl`
-   - Tiempo: `30` minutos
+### Backend (Terminal 1)
+```bash
+python run.py
+```
 
-3. Haz clic en "Registrar Restaurante"
-4. Deberías ver tu restaurante en la tabla
+### Frontend (Terminal 2)
+```bash
+cd frontend
+npm install  # Solo la primera vez
+npm run dev
+```
+
+### Verificar en navegador
+1. Ve a http://localhost:5173
+2. Deberías ver el panel de administración
+3. Prueba las funcionalidades de crear, editar y eliminar restaurantes/platos
 5. Haz clic en "Ver Menú" para agregar platos
 
 ---

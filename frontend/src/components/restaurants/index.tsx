@@ -22,20 +22,21 @@ export const RestauranteList: React.FC<RestauranteListProps> = ({
 }) => {
   const service = getRestauranteService();
   const { status, data, error, refetch } = useAsync(
-    () => service.getAll().then((res) => res.results || []),
+    () => service.getAll(),
     true
   );
 
-  const { items, search, setSearch } = useList(data || []);
+  const { items, search, setSearch } = useList(Array.isArray(data) ? data : []);
 
   const handleDelete = async (id: string) => {
     if (window.confirm('¿Está seguro?')) {
       try {
         await service.delete(id);
-        refetch();
+        await refetch();
         onDelete?.(id);
       } catch (err) {
-        alert('Error al eliminar');
+        const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+        alert(`Error al eliminar: ${errorMsg}`);
       }
     }
   };
@@ -60,45 +61,48 @@ export const RestauranteList: React.FC<RestauranteListProps> = ({
         />
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300">
-          <thead className="bg-gray-800 text-white">
+      <div className="overflow-x-auto" style={{ borderRadius: '8px', overflow: 'hidden' }}>
+        <table className="w-full border-collapse" style={{ borderColor: '#d1d5db' }}>
+          <thead style={{ backgroundColor: '#1F2937', color: '#FFFFFF' }}>
             <tr>
-              <th className="border border-gray-300 p-2">ID</th>
-              <th className="border border-gray-300 p-2">Nombre</th>
-              <th className="border border-gray-300 p-2">Dirección</th>
-              <th className="border border-gray-300 p-2">Teléfono</th>
-              <th className="border border-gray-300 p-2">Estado</th>
-              <th className="border border-gray-300 p-2">Acciones</th>
+              <th className="p-3 text-left">ID</th>
+              <th className="p-3 text-left">Nombre</th>
+              <th className="p-3 text-left">Dirección</th>
+              <th className="p-3 text-left">Teléfono</th>
+              <th className="p-3 text-left">Estado</th>
+              <th className="p-3 text-left">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {items.map((restaurante) => (
-              <tr key={restaurante.id_restaurante} className="hover:bg-gray-50">
-                <td className="border border-gray-300 p-2">
-                  <span className="bg-blue-200 px-2 py-1 rounded">
-                    {restaurante.id_restaurante}
-                  </span>
+              <tr key={restaurante.id_restaurante} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <td className="p-3" style={{ backgroundColor: '#f9fafb', fontWeight: 'bold' }}>
+                  {restaurante.id_restaurante}
                 </td>
-                <td className="border border-gray-300 p-2 font-semibold">
+                <td className="p-3" style={{ fontWeight: 'bold', color: '#1F2937' }}>
                   {restaurante.nombre}
                 </td>
-                <td className="border border-gray-300 p-2">
+                <td className="p-3">
                   {restaurante.direccion}
                 </td>
-                <td className="border border-gray-300 p-2">
+                <td className="p-3">
                   {restaurante.telefono}
                 </td>
-                <td className="border border-gray-300 p-2">
+                <td className="p-3">
                   <span
-                    className={`px-2 py-1 rounded text-white text-sm ${
-                      restaurante.activo ? 'bg-green-600' : 'bg-red-600'
-                    }`}
+                    style={{
+                      padding: '4px 12px',
+                      borderRadius: '4px',
+                      fontSize: '0.875rem',
+                      backgroundColor: restaurante.activo ? '#f0fdf4' : '#fef2f2',
+                      color: restaurante.activo ? '#15803d' : '#991b1b',
+                      fontWeight: 'bold',
+                    }}
                   >
                     {restaurante.activo ? 'Activo' : 'Inactivo'}
                   </span>
                 </td>
-                <td className="border border-gray-300 p-2">
+                <td className="p-3">
                   <div className="flex gap-2">
                     <Button
                       variant="primary"
@@ -108,7 +112,7 @@ export const RestauranteList: React.FC<RestauranteListProps> = ({
                       Editar
                     </Button>
                     <Button
-                      variant="danger"
+                      variant="secondary"
                       size="sm"
                       onClick={() => handleDelete(restaurante.id_restaurante)}
                     >
@@ -194,14 +198,16 @@ export const RestauranteForm: React.FC<RestauranteFormProps> = ({
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          label="ID Restaurante"
-          name="id_restaurante"
-          value={values.id_restaurante}
-          onChange={handleChange}
-          disabled={!!initialData}
-          required
-        />
+        {initialData && (
+          <Input
+            label="ID Restaurante"
+            name="id_restaurante"
+            value={values.id_restaurante}
+            onChange={handleChange}
+            disabled={true}
+            required
+          />
+        )}
 
         <Input
           label="Nombre"
@@ -250,7 +256,7 @@ export const RestauranteForm: React.FC<RestauranteFormProps> = ({
         <div className="flex gap-2">
           <Button
             type="submit"
-            variant="success"
+            variant="primary"
             loading={isSubmitting}
           >
             {initialData ? 'Actualizar' : 'Crear'}

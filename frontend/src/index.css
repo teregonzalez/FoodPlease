@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
+:root {
+  /* Colores principales - 2 colores de contraste */
+  --color-dark: #1F2937;
+  --color-white: #FFFFFF;
+  --color-light-gray: #f9fafb;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -8,8 +15,8 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--color-light-gray);
+  color: var(--color-dark);
 }
 
 html,
@@ -18,4 +25,40 @@ body,
   height: 100%;
 }
 
-/* Tailwind CSS - importado vía CDN en HTML */
+/* Estilos generales */
+input, textarea, select {
+  border-color: var(--color-dark);
+  color: var(--color-dark);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--color-dark);
+  box-shadow: 0 0 0 3px rgba(31, 41, 55, 0.1);
+}
+
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(31, 41, 55, 0.1);
+}
+
+/* Tablas */
+table {
+  border-color: var(--color-dark);
+}
+
+th {
+  background-color: var(--color-dark);
+  color: var(--color-white);
+}
+
+td {
+  border-color: #e5e7eb;
+}
+
+tr:hover {
+  background-color: rgba(31, 41, 55, 0.05);
+}

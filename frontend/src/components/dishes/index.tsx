@@ -26,23 +26,22 @@ export const PlatoList: React.FC<PlatoListProps> = ({
   const service = getPlatoService();
   const { status, data, error, refetch } = useAsync(
     () =>
-      service
-        .getAll(restauranteId ? { restaurante_id: restauranteId } : {})
-        .then((res) => res.results || []),
+      service.getAll(restauranteId ? { restaurante_id: restauranteId } : {}),
     true,
     [restauranteId]
   );
 
-  const { items, search, setSearch } = useList(data || []);
+  const { items, search, setSearch } = useList(Array.isArray(data) ? data : []);
 
   const handleDelete = async (id: string) => {
     if (window.confirm('¿Está seguro?')) {
       try {
         await service.delete(id);
-        refetch();
+        await refetch();
         onDelete?.(id);
       } catch (err) {
-        alert('Error al eliminar');
+        const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
+        alert(`Error al eliminar: ${errorMsg}`);
       }
     }
   };
@@ -69,28 +68,31 @@ export const PlatoList: React.FC<PlatoListProps> = ({
         {items.map((plato) => (
           <Card key={plato.id_plato} title={plato.nombre}>
             <div className="space-y-2">
-              <p className="text-sm text-gray-600">{plato.descripcion}</p>
+              <p className="text-sm" style={{ color: '#6b7280' }}>{plato.descripcion}</p>
 
               <div className="flex justify-between items-center">
-                <span className="font-semibold text-lg">
+                <span className="font-semibold text-lg" style={{ color: '#1F2937' }}>
                   ${plato.precio.toFixed(2)}
                 </span>
                 <span
-                  className={`text-sm px-2 py-1 rounded ${
-                    plato.disponible
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
-                  }`}
+                  style={{
+                    fontSize: '0.875rem',
+                    padding: '4px 12px',
+                    borderRadius: '4px',
+                    backgroundColor: plato.disponible ? '#f0fdf4' : '#fef2f2',
+                    color: plato.disponible ? '#15803d' : '#991b1b',
+                    fontWeight: 'bold',
+                  }}
                 >
                   {plato.disponible ? 'Disponible' : 'No disponible'}
                 </span>
               </div>
 
-              <p className="text-xs text-gray-500">
-                ⏱️ {plato.tiempo_preparacion} min
+              <p className="text-xs" style={{ color: '#6b7280' }}>
+                Tiempo: {plato.tiempo_preparacion} min
               </p>
 
-              <p className="text-xs text-gray-500">
+              <p className="text-xs" style={{ color: '#6b7280' }}>
                 Ingredientes: {plato.ingredientes}
               </p>
 
@@ -104,7 +106,7 @@ export const PlatoList: React.FC<PlatoListProps> = ({
                   Editar
                 </Button>
                 <Button
-                  variant="danger"
+                  variant="secondary"
                   size="sm"
                   className="flex-1"
                   onClick={() => handleDelete(plato.id_plato)}
@@ -240,7 +242,7 @@ export const PlatoForm: React.FC<PlatoFormProps> = ({
         <div className="flex gap-2">
           <Button
             type="submit"
-            variant="success"
+            variant="primary"
             loading={isSubmitting}
           >
             {initialData ? 'Actualizar' : 'Crear'}
