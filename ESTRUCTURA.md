@@ -11,41 +11,24 @@
 ```
 FoodPlease/
 │
-├── 📄 manage.py ........................... CLI de Django
+├── 📄 run.py .............................. Entry point Flask
+├── 📄 init_db.py ........................... Inicializador BD
 ├── 📄 README.md ........................... Guía principal
 │
-├── 📁 config/ ............................ 🔧 Configuración Django
-│   ├── __init__.py
-│   ├── settings.py ....................... Configuración del proyecto
-│   ├── urls.py ........................... Enrutador principal
-│   ├── wsgi.py ........................... Interfaz WSGI
-│   ├── asgi.py ........................... Interfaz ASGI
-│   └── __pycache__/
-│
-├── 📁 Aplicaciones/ ...................... 🚀 Aplicaciones Django
-│   └── 📁 Restaurantes/ .................. ⭐ ÚNICA APP ACTIVA
-│       ├── __init__.py
-│       ├── models.py ..................... Modelos de BD
-│       ├── views.py ..................... 🗑️ ELIMINADO - Solo comentario
-│       ├── urls.py ...................... 🗑️ ELIMINADO - Solo comentario
-│       ├── api_views.py ................. ✅ ViewSets REST API
-│       ├── urls_api.py .................. ✅ Rutas REST API
-│       ├── serializers.py ............... ✅ Serializadores DRF
-│       ├── admin.py ..................... Admin de Django
-│       ├── apps.py ....................... Configuración de app
-│       ├── tests.py ..................... Tests (vacío - fase 2)
-│       │
-│       ├── 📁 migrations/ ................ Historial de cambios en BD
-│       │   ├── __init__.py
-│       │   └── 0001_initial.py .......... Migración inicial
-│       │
-│       ├── 🗑️ templates/ ................ ❌ ELIMINADA (Use React en /frontend/)
-│       │
-│       └── 📁 static/ ................... Recursos estáticos heredados
-│           ├── 📁 css/
-│           │   └── gestionRestaurantes.css Obsoleto - Use React
-│           └── 📁 js/
-│               └── gestionRestaurantes.js. Obsoleto - Use React
+├── 📁 app/ .............................. 🔧 Backend Flask
+│   ├── __init__.py ....................... Factory Flask
+│   ├── config.py ......................... Configuración
+│   │
+│   ├── 📁 models/ ........................ 📊 Modelos SQLAlchemy
+│   │   └── __init__.py ................... Restaurante, Plato
+│   │
+│   ├── 📁 routes/ ........................ 🚀 Blueprints API REST
+│   │   ├── __init__.py
+│   │   ├── restaurantes.py .............. Endpoints /api/restaurantes/
+│   │   └── platos.py .................... Endpoints /api/platos/
+│   │
+│   └── 📁 schemas/ ....................... ✅ Validadores
+│       └── __init__.py
 │
 ├── 📁 .venv/ ............................ Entorno virtual Python
 ├── 📁 .git/ ............................. Control de versiones
@@ -68,16 +51,16 @@ FoodPlease/
 
 ## 🔑 Componentes Principales
 
-### Backend (Django)
+### Backend (Flask + SQLAlchemy)
 
 | Archivo | Propósito | Estado |
 |---------|-----------|--------|
-| `config/settings.py` | Configuración central | ✅ Activo |
-| `config/urls.py` | Enrutador principal | ✅ Activo |
-| `Aplicaciones/Restaurantes/models.py` | Modelos de datos | ✅ 2 modelos |
-| `Aplicaciones/Restaurantes/api_views.py` | ViewSets REST API | ✅ Activo |
-| `Aplicaciones/Restaurantes/urls_api.py` | Rutas REST API | ✅ Activo |
-| `Aplicaciones/Restaurantes/serializers.py` | Serializadores DRF | ✅ Activo |
+| `app/__init__.py` | Application factory Flask | ✅ Activo |
+| `app/config.py` | Configuración central | ✅ Activo |
+| `app/models/__init__.py` | Modelos SQLAlchemy | ✅ 2 modelos |
+| `app/routes/restaurantes.py` | Endpoints REST API | ✅ Activo |
+| `app/routes/platos.py` | Endpoints REST API | ✅ Activo |
+| `run.py` | Entry point Flask | ✅ Activo |
 
 ### Frontend (React + TypeScript)
 

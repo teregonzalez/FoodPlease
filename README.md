@@ -2,15 +2,15 @@
 
 **Una guía de implementación funcional de un CRUD web para la plataforma de delivery FoodPlease.**
 
-CRUD completo con **Python, Django y SQLite3**, usando el patrón de arquitectura **MTV (Modelo - Plantilla - Vista)**, el ORM de Django, el framework CSS **Bootstrap** y control de eventos con **JavaScript**.
+CRUD completo con **Python, Flask y SQLite3**, usando arquitectura **REST API** con SQLAlchemy ORM, **React** con Tailwind CSS para interfaz moderna y control de estado con TypeScript.
 
 ## ✨ Características Principales
 
 - ✅ CRUD completo de Restaurantes y Menú (Platos)
-- ✅ Interfaz responsiva con Bootstrap 4
+- ✅ Interfaz moderna con React y Tailwind CSS
 - ✅ Base de datos relacional (1:N)
 - ✅ Validaciones en cliente y servidor
-- ✅ Admin Panel de Django integrado
+- ✅ API REST con Flask y SQLAlchemy
 - ✅ Documentación completa para FoodPlease
 - ✅ Lista para extensiones futuras
 
@@ -30,21 +30,18 @@ Este proyecto incluye **4 guías completas** para implementación y extensión:
 ## 🚀 Inicio Rápido
 
 ```bash
-# 1. Instalar Django
-pip install django
+# 1. Crear entorno virtual
+python -m venv .venv
+.venv\Scripts\activate
 
-# 2. Crear migraciones
-python manage.py makemigrations Aplicaciones.Restaurantes
-python manage.py migrate
+# 2. Instalar dependencias
+pip install -r requirements.txt
 
-# 3. Crear usuario admin
-python manage.py createsuperuser
-
-# 4. Ejecutar servidor
-python manage.py runserver
+# 3. Ejecutar servidor Flask
+python run.py
 ```
 
-Accede a: **http://127.0.0.1:8000**
+Accede a: **http://127.0.0.1:5173** (Frontend) y **http://127.0.0.1:5000** (Backend API)
 
 > 💡 Para instrucciones detalladas, consulta [INICIO_RAPIDO.md](INICIO_RAPIDO.md)
 

@@ -2,7 +2,7 @@
 
 ## 📋 Introducción
 
-Este proyecto es una **guía de implementación mínimamente funcional** de un **CRUD (Create, Read, Update, Delete)** desarrollado con **Django** y **SQLite3**, adaptado específicamente para demostrar los conceptos fundamentales de la plataforma **FoodPlease**.
+Este proyecto es una **guía de implementación funcional** de un **CRUD (Create, Read, Update, Delete)** desarrollado con **Flask** y **SQLite3**, adaptado específicamente para demostrar los conceptos fundamentales de la plataforma **FoodPlease**.
 
 El sistema implementa las operaciones básicas necesarias para gestionar restaurantes y sus menús (platos), sirviendo como prototipo de la capa de administración web que FoodPlease requiere.
 
@@ -10,7 +10,7 @@ El sistema implementa las operaciones básicas necesarias para gestionar restaur
 
 ## 🎯 Objetivos del Proyecto
 
-1. **Demostrar un CRUD funcional** con despliegue local usando Django
+1. **Demostrar un CRUD funcional** con despliegue local usando Flask
 2. **Implementar modelos de datos** relevantes al sector de delivery gastronómico
 3. **Crear interfaces web responsivas** con Bootstrap 4
 4. **Documentar arquitectura y flujos** aplicables a FoodPlease
@@ -102,89 +102,119 @@ Un restaurante puede tener múltiples platos, pero cada plato pertenece a un ún
 
 ---
 
-## ⚙️ Operaciones CRUD Implementadas
+## ⚙️ Endpoints REST API Implementados
 
 ### CREATE (Crear)
 
-#### Registrar Restaurante
+#### Crear Restaurante
 ```
-POST /registrar/
+POST /api/restaurantes/
 ```
-**Parámetros:**
-- `txtIdRestaurante`: ID único
-- `txtNombre`: Nombre del local
-- `txtDireccion`: Dirección física
-- `txtTelefono`: Contacto
-- `txtEmail`: Email
-- `numTiempoPreparacion`: Tiempo promedio en minutos
+**Body JSON:**
+```json
+{
+  "nombre": "El Buen Sabor",
+  "direccion": "Calle 123",
+  "telefono": "+56912345678",
+  "email": "info@sabor.com",
+  "tiempo_promedio_preparacion": 30
+}
+```
+**Respuesta:** 201 CREATED con ID auto-generado (REST{8 dígitos})
 
-**Flujo:**
-1. Usuario accede a `/` (página principal)
-2. Completa formulario en panel izquierdo
-3. Sistema valida campos
-4. Crea registro en tabla `Restaurantes`
-5. Muestra mensaje de éxito
-6. Actualiza tabla de resultados
-
-#### Registrar Plato
+#### Crear Plato
 ```
-POST /registrar_plato/<id_restaurante>/
+POST /api/platos/
 ```
-Similar al anterior, pero requiere seleccionar primero un restaurante.
+**Body JSON:**
+```json
+{
+  "id_restaurante": "REST001",
+  "nombre": "Pasta Carbonara",
+  "descripcion": "Auténtica receta italiana",
+  "precio": 12500,
+  "tiempo_preparacion": 15,
+  "ingredientes": "Pasta, huevo, panceta, queso"
+}
+```
+**Respuesta:** 201 CREATED con ID auto-generado (PLAT{8 dígitos})
 
 ### READ (Leer)
 
 #### Listar Restaurantes
 ```
-GET /
+GET /api/restaurantes/
 ```
-- Consulta la base de datos: `SELECT * FROM Restaurantes`
-- Renderiza tabla con todos los registros
-- Incluye botones de acciones (Ver Menú, Editar, Eliminar)
+**Respuesta:** Array JSON con todos los restaurantes activos
+```json
+[
+  {
+    "id_restaurante": "REST001",
+    "nombre": "El Buen Sabor",
+    "direccion": "Calle 123",
+    "activo": true
+  }
+]
+```
 
-#### Ver Detalles del Menú
+#### Obtener Restaurante Específico
 ```
-GET /detalles_platos/<id_restaurante>/
+GET /api/restaurantes/<id_restaurante>/
+```
+- Retorna información detallada de un restaurante
+- 404 si no existe
+
+#### Listar Platos
+```
+GET /api/platos/
+```
+- Retorna array de todos los platos disponibles
+
+#### Obtener Platos de un Restaurante
+```
+GET /api/platos/?id_restaurante=REST001
 ```
 - Filtra platos por restaurante
-- Muestra tabla con el menú completo
-- Permite agregar nuevos platos
 
 ### UPDATE (Actualizar)
 
-#### Editar Restaurante
+#### Actualizar Restaurante
 ```
-GET  /edicion/<id_restaurante>
-POST /editar/
+PUT /api/restaurantes/<id_restaurante>/
 ```
-1. Usuario accede a `/edicion/<id>`
-2. Sistema carga datos actuales en formulario
-3. Usuario modifica campos
-4. Envía POST a `/editar/`
-5. Sistema actualiza registro: `UPDATE Restaurantes SET ... WHERE id_restaurante = ?`
-6. Redirige a inicio
+**Body JSON:** Los campos a actualizar
+```json
+{
+  "nombre": "Nuevo Nombre",
+  "telefono": "+56987654321"
+}
+```
+**Respuesta:** 200 OK con registro actualizado
 
-#### Editar Plato
+#### Actualizar Plato
 ```
-GET  /edicion_plato/<id_restaurante>/<id_plato>
-POST /editar_plato/<id_restaurante>/
+PUT /api/platos/<id_plato>/
 ```
+**Body JSON:** Los campos a actualizar
+**Respuesta:** 200 OK con registro actualizado
 
-### DELETE (Eliminar)
+### DELETE (Eliminar - Soft Delete)
 
 #### Eliminar Restaurante
 ```
-GET /eliminar/<id_restaurante>
+DELETE /api/restaurantes/<id_restaurante>/
 ```
-1. Usuario hace clic en botón "Eliminar"
-2. JavaScript muestra confirmación
-3. Si confirma: `DELETE FROM Restaurantes WHERE id_restaurante = ?`
-4. También elimina platos asociados (cascada)
+- Marca el restaurante como inactivo (activo = False)
+- No elimina el registro, lo desactiva
+- **Respuesta:** 200 OK
 
 #### Eliminar Plato
 ```
-GET /eliminar_plato/<id_restaurante>/<id_plato>
+DELETE /api/platos/<id_plato>/
 ```
+- Marca el plato como no disponible (disponible = False)
+- No elimina el registro, lo desactiva
+- **Respuesta:** 200 OK
 
 ---
 
@@ -268,25 +298,31 @@ El frontend estará disponible en: **http://localhost:5173**
 ## 🔄 Flujo de Datos
 
 ```
-Usuario accede a /
+Usuario accede a http://localhost:5173
   ↓
-Django carga vista home()
+React carga App.tsx (componente principal)
   ↓
-Consulta DB: SELECT * FROM Restaurantes
+React efectúa GET /api/restaurantes/
   ↓
-Renderiza template: gestionRestaurantes.html
+Flask procesa petición en app/routes/restaurantes.py
   ↓
-Transmite datos (contexto) al template
+Consulta DB: SELECT * FROM Restaurantes WHERE activo=True
   ↓
-Template genera HTML con Jinja2
+SQLAlchemy convierte resultados a JSON
   ↓
-Navegador renderiza en cliente
+Flask retorna respuesta JSON con array de restaurantes
+  ↓
+React actualiza estado (useState)
+  ↓
+React re-renderiza componentes con nuevos datos
+  ↓
+Navegador muestra tabla de restaurantes
   ↓
 Usuario interactúa (formulario, botones)
   ↓
-POST/GET a vista correspondiente
+React efectúa POST/PUT/DELETE a /api/restaurantes/
   ↓
-Vista procesa datos
+Flask procesa, actualiza base de datos
   ↓
 Modifica BD si es necesario
   ↓
@@ -297,21 +333,26 @@ Redirige o renderiza nuevamente
 
 ## 🔐 Seguridad Implementada
 
-### 1. **CSRF Protection**
-```html
-{% csrf_token %}
+### 1. **CORS (Cross-Origin Resource Sharing)**
+```python
+# Flask app/config.py
+CORS_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"]
 ```
-Django genera token en formularios para prevenir ataques cross-site.
+Controla qué orígenes pueden acceder a la API.
 
 ### 2. **Validación de Entrada**
-- HTML5: `required`, `minlength`, `maxlength`, `pattern`
-- Django: `ModelForm` con validaciones automáticas
-- JavaScript: Funciones de validación en `gestionRestaurantes.js`
+- **Frontend (React):** Validaciones en formularios antes de enviar
+- **Backend (Flask):** Validaciones en modelos SQLAlchemy
+- **Database:** Constraints en tipos y campos requeridos
 
 ### 3. **Confirmación de Eliminación**
-```javascript
-// Antes de permitir DELETE, solicita confirmación
-if (confirm('¿Estás seguro?')) {
+```typescript
+// React: Solicita confirmación antes de eliminar
+const handleDelete = (id: string) => {
+  if (window.confirm('¿Estás seguro?')) {
+    deleteRestaurant(id);
+  }
+};
     window.location.href = enlace_delete;
 }
 ```
@@ -356,13 +397,15 @@ CREATE TABLE Platos (
 );
 ```
 
-### Visualización en Admin
-Django Admin (`/admin/`) permite:
-- ✅ Ver todas las tablas
-- ✅ Crear registros manualmente
+### Gestión a través de Frontend React
+
+El panel web (`http://localhost:5173`) permite:
+- ✅ Ver todas las tablas de restaurantes y platos
+- ✅ Crear registros a través de formularios
 - ✅ Editar datos directamente
 - ✅ Aplicar filtros y búsquedas
-- ✅ Exportar datos
+- ✅ Soft delete (marcar como inactivo)
+- ✅ Interfaz responsiva y moderna
 
 ---
 
@@ -378,7 +421,7 @@ Django Admin (`/admin/`) permite:
 | **Gestión de Repartidores** | ❌ No | Requiere modelo Repartidor y GPS |
 | **Notificaciones en Tiempo Real** | ❌ No | Requiere WebSockets/Firebase |
 | **Pagos** | ❌ No | Requiere integración Transbank/MercadoPago |
-| **Autenticación Multi-rol** | ⚠️ Básica | Django auth; requiere extensión |
+| **Autenticación Multi-rol** | ⚠️ Básica | Requiere JWT/Bearer Tokens |
 
 ### Qué Agregar Progresivamente
 
@@ -484,45 +527,46 @@ Ingredientes: Choclo, pollo, cebolla, aceituna, máscarpone
 ### Puntos Fuertes del CRUD
 
 ✅ **Implementación completa de CRUD** (4 operaciones fundamentales)
-✅ **Interfaz responsiva** adaptable a diferentes pantallas
+✅ **Interfaz moderna** con React y Tailwind CSS
+✅ **API REST** completamente funcional
 ✅ **Validación en cliente y servidor**
-✅ **Seguridad básica** con CSRF tokens
-✅ **Herencia de templates** con Jinja2
-✅ **Relaciones de modelos** (1:N)
-✅ **Admin Panel** para gestión avanzada
-✅ **Migraciones automáticas** de BD
+✅ **CORS** para comunicación frontend-backend
+✅ **Relaciones de modelos** (1:N) con SQLAlchemy
+✅ **Soft delete** implementado (activo/disponible)
+✅ **Soft delete** implementado (activo/disponible)
+✅ **Auto-generación de IDs** (REST{8}, PLAT{8})
 
 ### Limitaciones y Mejoras Futuras
 
-❌ Falta **autenticación de usuarios**
+❌ Falta **autenticación de usuarios** con JWT
 ❌ No hay **roles o permisos** granulares
 ❌ Sin **auditoría** de cambios
-❌ No implementa **soft delete** (registros lógicos)
 ❌ Faltan **búsqueda y filtrado avanzado**
 ❌ Sin **paginación** en tablas grandes
-❌ No hay **API REST** (solo vistas HTML)
-❌ Sin **pruebas unitarias** (tests.py vacío)
+❌ Sin **tests unitarios** (test.py vacío)
+❌ Sin **deploy** a producción
 
 ### Recomendaciones de Mejora
 
 ```python
-# 1. Agregar paginación
-from django.core.paginator import Paginator
+# 1. Agregar autenticación con JWT
+from flask_jwt_extended import JWTManager, create_access_token
 
-# 2. Crear API REST con Django REST Framework
-from rest_framework import serializers, viewsets
+# 2. Implementar roles y permisos
+from functools import wraps
 
-# 3. Agregar autenticación
-from django.contrib.auth.models import User
+# 3. Agregar tests
+import pytest
+from flask.testing import FlaskClient
 
-# 4. Crear formularios reutilizables
-from django import forms
+# 4. Implementar búsqueda avanzada
+from sqlalchemy import or_
 
-# 5. Implementar búsqueda
-queryset = Restaurante.objects.filter(nombre__icontains=query)
+# 5. Agregar paginación
+from flask_sqlalchemy import Pagination
 
-# 6. Agregar tests
-from django.test import TestCase
+# 6. Implementar auditoría
+# Registrar cambios en tabla de histórico
 ```
 
 ---
@@ -531,9 +575,9 @@ from django.test import TestCase
 
 Este CRUD cumple con los requisitos para ser una **guía de implementación funcional**:
 
-- ✅ Análisis del modelo de negocio de delivery
-- ✅ CRUD mínimamente funcional (Create, Read, Update, Delete)
-- ✅ Despliegue local (runserver)
+- ✅ Arquitectura moderna (Flask + React + SQLAlchemy)
+- ✅ CRUD completo funcional (Create, Read, Update, Delete)
+- ✅ Despliegue local (Flask dev server)
 - ✅ Base de datos relacional (SQLite3)
 - ✅ Interfaz web responsiva
 - ✅ Validaciones básicas de entrada
@@ -545,9 +589,11 @@ Este CRUD cumple con los requisitos para ser una **guía de implementación func
 ## 📞 Soporte y Contacto
 
 Para mejoras o preguntas sobre este CRUD, considere:
-1. Revisar la documentación oficial de Django: https://docs.djangoproject.com/
-2. Explorar el admin en `/admin/` para comprender la BD
-3. Extender modelos según necesidades específicas
+1. Revisar la documentación oficial de Flask: https://flask.palletsprojects.com/
+2. Explorar el frontend en `http://localhost:5173` para ver toda la funcionalidad
+3. Consultar la API en `http://127.0.0.1:5000/api` usando herramientas como Postman o Insomnia
+4. Extender modelos según necesidades específicas
+5. Revisar la documentación de SQLAlchemy: https://www.sqlalchemy.org/
 
 ---
 
