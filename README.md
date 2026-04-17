@@ -53,7 +53,7 @@ Accede a: **http://127.0.0.1:8000**
 ## 📊 Estructura del Proyecto
 
 ```
-django-crud-sqlite3/
+FoodPlease/
 ├── Aplicaciones/
 │   └── Restaurantes/        # CRUD de Restaurantes y Platos
 │       ├── models.py        # Modelos: Restaurante, Plato

@@ -3,7 +3,7 @@
 ## Estructura Final del Proyecto
 
 ```
-django-crud-sqlite3/ (RAÍZ)
+FoodPlease/ (RAÍZ)
 │
 ├── 📄 README.md .......................... ← Actualizado con FoodPlease
 ├── 📄 INICIO_RAPIDO.md .................. ← START HERE (5 min)

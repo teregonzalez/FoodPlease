@@ -18,7 +18,7 @@ Esta guía explica cómo ejecutar **Django backend** + **React frontend** juntos
 
 ```bash
 # Entrar en raíz del proyecto
-cd django-crud-sqlite3
+cd FoodPlease
 
 # Crear entorno virtual
 python -m venv .venv
@@ -62,7 +62,7 @@ npm run type-check
 ### Terminal 1: Django Backend
 
 ```bash
-cd django-crud-sqlite3
+cd FoodPlease
 source .venv/bin/activate  # o .venv\Scripts\activate en Windows
 
 # Ejecutar servidor
@@ -165,7 +165,7 @@ npm run dev
 ## 🏗️ Estructura del Proyecto
 
 ```
-django-crud-sqlite3/
+FoodPlease/
 ├── Aplicaciones/
 │   └── Restaurantes/
 │       ├── models.py              (BD)

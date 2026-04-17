@@ -9,7 +9,7 @@
 
 ### ❌ ANTES (Código Legado)
 ```
-django-crud-sqlite3/
+FoodPlease/
 ├── Aplicaciones/
 │   ├── Academico/              ❌ App OBSOLETA de cursos
 │   │   ├── models.py           ❌ Modelo Curso
@@ -47,7 +47,7 @@ django-crud-sqlite3/
 
 ### ✅ DESPUÉS (Limpio)
 ```
-django-crud-sqlite3/
+FoodPlease/
 ├── Aplicaciones/
 │   └── Restaurantes/           ✅ ÚNICA APP
 │       ├── models.py           ✅ Modelos: Restaurante, Plato

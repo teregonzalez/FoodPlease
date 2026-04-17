@@ -160,7 +160,7 @@ python manage.py showmigrations
 ## 📊 Estructura Simplificada
 
 ```
-django-crud-sqlite3/
+FoodPlease/
 ├── config/                    # 🔧 Django config (was Universidad/)
 ├── Aplicaciones/Restaurantes/ # ⭐ ÚNICA APP
 ├── foodplease.db              # 🗄️ Base de datos

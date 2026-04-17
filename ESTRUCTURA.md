@@ -9,7 +9,7 @@
 ## 📊 Árbol del Proyecto
 
 ```
-django-crud-sqlite3/
+FoodPlease/
 │
 ├── 📄 manage.py ........................... CLI de Django
 ├── 📄 README.md ........................... Guía principal

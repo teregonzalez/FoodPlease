@@ -24,7 +24,7 @@
 **Opción A: Clonar desde Git**
 ```bash
 git clone <URL_REPOSITORIO>
-cd django-crud-sqlite3
+cd FoodPlease
 ```
 
 **Opción B: Descargar ZIP**
@@ -269,7 +269,7 @@ pip install django gunicorn psycopg2
 ```bash
 cd /home/ubuntu
 git clone <URL_REPO>
-cd django-crud-sqlite3
+cd FoodPlease
 ```
 
 **5. Configurar Nginx**

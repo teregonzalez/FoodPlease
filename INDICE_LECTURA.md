@@ -230,7 +230,7 @@ Si marcaste todo ✅, **¡Dominas el proyecto!**
 
 ```bash
 # 1. Ve al directorio del proyecto
-cd django-crud-sqlite3
+cd FoodPlease
 
 # 2. Abre INICIO_RAPIDO.md
 # y sigue los 5 pasos
