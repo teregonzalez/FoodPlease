@@ -8,20 +8,62 @@ import {
   IPlatoDetail,
   IApiListResponse,
 } from '../types';
+import { Capacitor } from '@capacitor/core';
 
 /**
  * API Base Client
  * SOLID: SRP - Solo responsable de requests HTTP
+ * Soporta tanto navegador web como aplicaciones nativas (iOS/Android)
  */
 class ApiClient {
   private baseURL: string;
   private headers: HeadersInit;
+  private isNative: boolean;
 
-  constructor(baseURL: string = 'http://127.0.0.1:5000/api') {
-    this.baseURL = baseURL;
+  constructor(baseURL?: string) {
+    this.isNative = Capacitor.isNativePlatform();
+    
+    // Resolver URL del backend dinámicamente
+    if (baseURL) {
+      this.baseURL = baseURL;
+    } else {
+      this.baseURL = this.resolveBackendURL();
+    }
+
     this.headers = {
       'Content-Type': 'application/json',
     };
+
+    console.log(`[ApiClient] Inicializado - Plataforma: ${this.isNative ? 'Nativa' : 'Web'} - URL: ${this.baseURL}`);
+  }
+
+  /**
+   * Resolver la URL del backend según el entorno
+   * En desarrollo: http://localhost:5000/api
+   * En producción (GitHub Pages): https://foodplease-3.onrender.com/api
+   */
+  private resolveBackendURL(): string {
+    // 1. Verificar si existe variable de entorno explícita (tiene máxima prioridad)
+    const envURL = import.meta.env.VITE_BACKEND_URL;
+    if (envURL) {
+      return envURL;
+    }
+
+    // 2. Comprobar si estamos en modo producción (al hacer npm run build / deploy)
+    const isProd = import.meta.env.PROD;
+
+    // URLs por defecto según plataforma
+    if (this.isNative) {
+      // En dispositivo nativo
+      return isProd 
+        ? 'https://foodplease-3.onrender.com/api' // <--- URL DE RENDER PARA NATIVO
+        : 'http://localhost:5000/api';
+    } else {
+      // En navegador web
+      return isProd
+        ? 'https://foodplease-3.onrender.com/api' // <--- URL DE RENDER PARA GITHUB PAGES
+        : 'http://127.0.0.1:5000/api';
+    }
   }
 
   async request<T>(
