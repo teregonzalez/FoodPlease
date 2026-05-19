@@ -13,9 +13,9 @@ os.environ.setdefault('FLASK_APP', 'run.py')
 app = create_app()
 
 if __name__ == '__main__':
-    # Ejecutar el servidor
-    app.run(
-        host='127.0.0.1',
-        port=5000,
-        debug=True
-    )
+    # Render asigna un puerto dinámico mediante la variable de entorno PORT.
+    # Si no la encuentra (como en tu PC local), usará el 5000.
+    port = int(os.environ.get('PORT', 5000))
+    
+    # host='0.0.0.0' es obligatorio para que funcione en la nube
+    app.run(host='0.0.0.0', port=port)
