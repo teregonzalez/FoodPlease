@@ -5,6 +5,7 @@ import {
   RestauranteForm,
 } from './components/restaurants';
 import { PlatoList, PlatoForm } from './components/dishes';
+import SVGComponent from './assets/svgComponent';
 
 /**
  * Aplicación Principal
@@ -48,10 +49,9 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f9fafb' }}>
       {/* Header */}
-      <header style={{ backgroundColor: '#1F2937' }} className="text-white shadow-lg">
+      <header style={{ backgroundColor: '#f9fafb' }} className="text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold">FoodPlease Admin</h1>
-          <p className="mt-2 text-gray-300">Gestión de Restaurantes y Menú</p>
+          <SVGComponent />
         </div>
       </header>
 
